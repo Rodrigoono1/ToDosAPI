@@ -1,5 +1,6 @@
 ﻿using ToDosAPI.Models;
 using ToDosAPI.Data;
+using Microsoft.EntityFrameworkCore;
 namespace ToDosAPI.Services
 {
     public class ToDoService:IToDoService
@@ -11,10 +12,11 @@ namespace ToDosAPI.Services
         }
         public IEnumerable<ToDo> Get()
         {
-            return _context.ToDos;
+            return _context.ToDos.Include(a=>a.Category);
         }
         public async Task Save(ToDo todo)
         {
+            todo.Id = Guid.NewGuid();
             _context.Add(todo);
             await _context.SaveChangesAsync();
         }

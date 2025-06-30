@@ -32,22 +32,28 @@ namespace ToDosAPI.Controllers
         // POST: api/Categories
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public IActionResult Post([FromBody] Category category)
+        public IActionResult Post([FromBody] CategoryDTO category)
         {
-            _service.Save(category);
-            return Ok();
+            var newCategory = new Category
+            {
+                Name = category.Name,
+                Description = category.Description
+            };
+            _service.Save(newCategory);
+            return Created();
         }
 
         // PUT: api/Categories/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public IActionResult Put(Guid id,[FromBody] Category category)
+        public IActionResult Put(Guid id,[FromBody] CategoryDTO category)
         {
-            if (id != category.Id)
+            var categoryUpdate = new Category
             {
-                return BadRequest();
-            }
-            _service.Update(category, id);
+                Name = category.Name,
+                Description = category.Description
+            };
+            _service.Update(categoryUpdate, id);
             return NoContent();
         }
 

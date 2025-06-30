@@ -32,12 +32,21 @@ namespace ToDosAPI.Controllers
         // POST: api/ToDos
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public IActionResult Post([FromBody] ToDo toDo)
+        public IActionResult Post([FromBody] ToDoDTO toDo)
         {
-            _service.Save(toDo);
+            var newToDo = new ToDo
+            {
+                CategoryId = toDo.CategoryId,
+                Title = toDo.Title,
+                Description = toDo.Description,
+                ToDoPriority = toDo.ToDoPriority,
+                DateCreated = toDo.DateCreated,
+                Summary = toDo.Summary
+            };
+            _service.Save(newToDo);
             
 
-            return NoContent();
+            return Created();
         }
 
         // PUT: api/ToDos/5
@@ -45,11 +54,6 @@ namespace ToDosAPI.Controllers
         [HttpPut("{id}")]
         public IActionResult Put(Guid id,[FromBody] ToDo toDo)
         {
-            if (id != toDo.Id)
-            {
-                return BadRequest();
-            }
-
             _service.Update(toDo, id);
             return NoContent();
         }
